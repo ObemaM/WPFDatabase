@@ -1,14 +1,27 @@
-﻿using System.Configuration;
-using System.Data;
-using System.Windows;
+﻿using System.Windows;
+using Microsoft.EntityFrameworkCore;
+using WPFDatabase.Data;
 
-namespace WPFDatabase
+namespace WPFDatabase;
+
+public partial class App : Application
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
+    public static AppDbContext DbContext { get; private set; } = null!;
+
+    protected override void OnStartup(StartupEventArgs e)
     {
+        var options = new DbContextOptionsBuilder<AppDbContext>()
+            .UseSqlite("Data Source=wpfdatabase.db")
+            .Options;
+
+        DbContext = new AppDbContext(options);
+
+        base.OnStartup(e);
     }
 
+    protected override void OnExit(ExitEventArgs e)
+    {
+        DbContext.Dispose();
+        base.OnExit(e);
+    }
 }
