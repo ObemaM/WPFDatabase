@@ -16,6 +16,10 @@ public class Brand : INotifyPropertyChanged
     private string _country = string.Empty;
     private int _foundedYear;
     private ObservableCollection<Series> _series;
+    public Brand()
+    {
+        _series = new ObservableCollection<Series>();
+    }
 
     public int Id
     {

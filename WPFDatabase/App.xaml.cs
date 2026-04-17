@@ -15,6 +15,9 @@ public partial class App : Application
             .Options;
 
         DbContext = new AppDbContext(options);
+        
+        // Загрузка данных из файла
+        DataSeeder.Seed(DbContext);
 
         base.OnStartup(e);
     }

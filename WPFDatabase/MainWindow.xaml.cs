@@ -1,24 +1,50 @@
-﻿using System.Text;
+﻿using Microsoft.EntityFrameworkCore;
+using WPFDatabase.Models;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace WPFDatabase
+
+namespace WPFDatabase;
+
+public partial class MainWindow : Window
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    private object? _selectedItem;
+
+    private void MainTreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
     {
-        public MainWindow()
+        _selectedItem = e.NewValue;
+
+        if (_selectedItem is Brand brand)
         {
-            InitializeComponent();
+            InfoTextBlock.Text = $"Бренд: {brand.Name}\nСтрана: {brand.Country}\nГод основания: {brand.FoundedYear}";
         }
+        else if (_selectedItem is Series series)
+        {
+            InfoTextBlock.Text = $"Серия: {series.Name}\nСегмент: {series.Segment}";
+        }
+        else if (_selectedItem is SmartphoneModel model)
+        {
+            InfoTextBlock.Text =
+                $"Модель: {model.Name}\nГод: {model.ReleaseYear}\nЦена: {model.Price}\nRAM: {model.RamGb} GB\nПамять: {model.StorageGb} GB";
+        }
+        else
+        {
+            InfoTextBlock.Text = "Ничего не выбрано";
+        }
+    }
+
+    public MainWindow()
+    {
+        InitializeComponent();
+        LoadData();
+    }
+
+    private void LoadData()
+    {
+        var brands = App.DbContext.Brands
+            .Include(b => b.Series)
+            .ThenInclude(s => s.SmartphoneModels)
+            .ToList();
+
+        MainTreeView.ItemsSource = brands;
     }
 }

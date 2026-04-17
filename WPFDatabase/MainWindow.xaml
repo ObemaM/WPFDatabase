@@ -3,10 +3,82 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WPFDatabase"
+        xmlns:models="clr-namespace:WPFDatabase.Models"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="Управление смартфонами"
+        Height="600" Width="1000"
+        WindowStartupLocation="CenterScreen">
 
+    <Window.Resources>
+        <HierarchicalDataTemplate DataType="{x:Type models:Brand}" ItemsSource="{Binding Series}">
+            <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+        </HierarchicalDataTemplate>
+
+        <HierarchicalDataTemplate DataType="{x:Type models:Series}" ItemsSource="{Binding SmartphoneModels}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Name}" FontWeight="SemiBold"/>
+                <TextBlock Text=" (" Foreground="Gray"/>
+                <TextBlock Text="{Binding Segment}" Foreground="Gray"/>
+                <TextBlock Text=")" Foreground="Gray"/>
+            </StackPanel>
+        </HierarchicalDataTemplate>
+
+        <DataTemplate DataType="{x:Type models:SmartphoneModel}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Name}"/>
+                <TextBlock Text=", " Foreground="Gray"/>
+                <TextBlock Text="{Binding ReleaseYear}" Foreground="Gray"/>
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="1" Padding="10">
+            <TreeView x:Name="MainTreeView"
+                      SelectedItemChanged="MainTreeView_SelectedItemChanged"/>
+        </Border>
+
+        <GridSplitter Grid.Column="1"
+                      Width="5"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      Background="LightGray"/>
+
+        <Border Grid.Column="2" BorderBrush="Gray" BorderThickness="1" Padding="10">
+            <StackPanel>
+                <TextBlock Text="Информация"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Margin="0,0,0,15"/>
+
+                <TextBlock x:Name="InfoTextBlock"
+                           Text="Ничего не выбрано"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,20"/>
+
+                <Button x:Name="AddButton"
+                        Content="Добавить"
+                        Height="40"
+                        Margin="0,0,0,10"
+                        />
+
+                <Button x:Name="EditButton"
+                        Content="Редактировать"
+                        Height="40"
+                        Margin="0,0,0,10"
+                        />
+
+                <Button x:Name="DeleteButton"
+                        Content="Удалить"
+                        Height="40"
+                        />
+            </StackPanel>
+        </Border>
     </Grid>
 </Window>
