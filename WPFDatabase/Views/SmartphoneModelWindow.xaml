@@ -1,0 +1,64 @@
+<Window x:Class="WPFDatabase.Views.SmartphoneModelWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Модель смартфона"
+        Height="400" Width="400"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize">
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,10">
+            <TextBlock Text="Название модели"/>
+            <TextBox x:Name="NameTextBox"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Margin="0,0,0,10">
+            <TextBlock Text="Год выпуска"/>
+            <TextBox x:Name="ReleaseYearTextBox"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Margin="0,0,0,10">
+            <TextBlock Text="Цена"/>
+            <TextBox x:Name="PriceTextBox"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" Margin="0,0,0,10">
+            <TextBlock Text="RAM (GB)"/>
+            <TextBox x:Name="RamTextBox"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="4" Margin="0,0,0,10">
+            <TextBlock Text="Память (GB)"/>
+            <TextBox x:Name="StorageTextBox"/>
+        </StackPanel>
+
+        <TextBlock x:Name="ErrorTextBlock"
+                   Grid.Row="5"
+                   Foreground="Red"
+                   TextWrapping="Wrap"
+                   Margin="0,10,0,10"/>
+
+        <StackPanel Grid.Row="6"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center">
+            <Button Content="Сохранить"
+                    Width="100"
+                    Margin="5"
+                    Click="SaveButton_Click"/>
+            <Button Content="Отмена"
+                    Width="100"
+                    Margin="5"
+                    Click="CancelButton_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>
