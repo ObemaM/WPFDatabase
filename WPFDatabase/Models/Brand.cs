@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -24,7 +24,7 @@ public class Brand : INotifyPropertyChanged
     public int Id
     {
         get => _id;
-        // Поле переписывается и после вызывается хэндлер
+        // РџРѕР»Рµ РїРµСЂРµРїРёСЃС‹РІР°РµС‚СЃСЏ Рё РїРѕСЃР»Рµ РІС‹Р·С‹РІР°РµС‚СЃСЏ С…СЌРЅРґР»РµСЂ
         set { _id = value; OnPropertyChanged(); }
     }
 
@@ -46,7 +46,7 @@ public class Brand : INotifyPropertyChanged
         set { _foundedYear = value; OnPropertyChanged(); }
     }
 
-    // ObservableCollection - коллекция, которая уведомляет UI о добавлении/удалении элементов
+    // ObservableCollection - РєРѕР»Р»РµРєС†РёСЏ, РєРѕС‚РѕСЂР°СЏ СѓРІРµРґРѕРјР»СЏРµС‚ UI Рѕ РґРѕР±Р°РІР»РµРЅРёРё/СѓРґР°Р»РµРЅРёРё СЌР»РµРјРµРЅС‚РѕРІ
     public ObservableCollection<Series> Series
     {
         get => _series;

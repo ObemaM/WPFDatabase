@@ -1,0 +1,63 @@
+<Window x:Class="WPFDatabase.Views.UserManagementWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Пользователи"
+        Height="460"
+        Width="720"
+        MinWidth="620"
+        MinHeight="380"
+        WindowStartupLocation="CenterOwner">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <ListView Grid.Row="0"
+                  ItemsSource="{Binding Users}"
+                  SelectedItem="{Binding SelectedUser, Mode=TwoWay}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Логин"
+                                    Width="180"
+                                    DisplayMemberBinding="{Binding Login}"/>
+                    <GridViewColumn Header="Дата регистрации"
+                                    Width="180"
+                                    DisplayMemberBinding="{Binding RegisteredAt}"/>
+                    <GridViewColumn Header="Активен"
+                                    Width="80"
+                                    DisplayMemberBinding="{Binding IsActive}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <WrapPanel Grid.Row="1"
+                   Margin="0,12,0,0"
+                   HorizontalAlignment="Center">
+            <Button Content="Добавить"
+                    Width="90"
+                    Margin="5"
+                    Command="{Binding AddUserCommand}"/>
+            <Button Content="Изменить"
+                    Width="90"
+                    Margin="5"
+                    Command="{Binding EditUserCommand}"/>
+            <Button Content="Удалить"
+                    Width="90"
+                    Margin="5"
+                    Command="{Binding DeleteUserCommand}"/>
+            <Button Content="{Binding ToggleUserStateText}"
+                    Width="90"
+                    Margin="5"
+                    Command="{Binding ToggleUserStateCommand}"/>
+            <Button Content="Обновить"
+                    Width="90"
+                    Margin="5"
+                    Command="{Binding RefreshCommand}"/>
+            <Button Content="Закрыть"
+                    Width="90"
+                    Margin="5"
+                    Command="{Binding CloseCommand}"/>
+        </WrapPanel>
+    </Grid>
+</Window>

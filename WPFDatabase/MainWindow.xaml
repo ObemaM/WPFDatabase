@@ -6,79 +6,307 @@
         xmlns:models="clr-namespace:WPFDatabase.Models"
         mc:Ignorable="d"
         Title="Управление смартфонами"
-        Height="600" Width="1000"
-        WindowStartupLocation="CenterScreen">
+        Height="620" Width="1040"
+        MinWidth="900" MinHeight="600"
+        WindowStartupLocation="CenterScreen"
+        FontSize="14">
 
     <Window.Resources>
-        <HierarchicalDataTemplate DataType="{x:Type models:Brand}" ItemsSource="{Binding Series}">
-            <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
-        </HierarchicalDataTemplate>
-
-        <HierarchicalDataTemplate DataType="{x:Type models:Series}" ItemsSource="{Binding SmartphoneModels}">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Name}" FontWeight="SemiBold"/>
-                <TextBlock Text=" (" Foreground="Gray"/>
-                <TextBlock Text="{Binding Segment}" Foreground="Gray"/>
-                <TextBlock Text=")" Foreground="Gray"/>
-            </StackPanel>
-        </HierarchicalDataTemplate>
+        <SolidColorBrush x:Key="PrimaryBrush" Color="LightSteelBlue"/>
+        <SolidColorBrush x:Key="SelectedBorderBrush" Color="#3F51B5"/>
 
         <DataTemplate DataType="{x:Type models:SmartphoneModel}">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Name}"/>
-                <TextBlock Text=", " Foreground="Gray"/>
-                <TextBlock Text="{Binding ReleaseYear}" Foreground="Gray"/>
-            </StackPanel>
+            <Border CornerRadius="3"
+                    Padding="6"
+                    Margin="2"
+                    PreviewMouseLeftButtonDown="Model_PreviewMouseLeftButtonDown"
+                    PreviewMouseMove="Model_PreviewMouseMove"
+                    PreviewMouseRightButtonDown="TreeItem_PreviewMouseRightButtonDown">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="BorderBrush" Value="LightGray"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem}, Path=IsSelected}" Value="True">
+                                <Setter Property="BorderBrush" Value="{StaticResource SelectedBorderBrush}"/>
+                                <Setter Property="BorderThickness" Value="2"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+
+                <Border.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Редактировать модель"
+                                  Tag="{Binding}"
+                                  Click="EditMenuItem_Click"/>
+                        <MenuItem Header="Удалить модель"
+                                  Tag="{Binding}"
+                                  Click="DeleteMenuItem_Click"/>
+                    </ContextMenu>
+                </Border.ContextMenu>
+
+                <StackPanel>
+                    <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                        <TextBlock Text="Год: " Foreground="Gray"/>
+                        <TextBlock Text="{Binding ReleaseYear}"/>
+                        <TextBlock Text="   Цена: " Foreground="Gray" Margin="10,0,0,0"/>
+                        <TextBlock Text="{Binding Price}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="RAM: " Foreground="Gray"/>
+                        <TextBlock Text="{Binding RamGb}"/>
+                        <TextBlock Text=" ГБ   Память: " Foreground="Gray" Margin="10,0,0,0"/>
+                        <TextBlock Text="{Binding StorageGb}"/>
+                        <TextBlock Text=" ГБ"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
         </DataTemplate>
+
+        <HierarchicalDataTemplate DataType="{x:Type models:Series}"
+                                  ItemsSource="{Binding SmartphoneModels}">
+            <Border CornerRadius="4"
+                    Padding="7"
+                    Margin="2"
+                    Background="#FFF7F7F7"
+                    AllowDrop="True"
+                    DragOver="Series_DragOver"
+                    Drop="Series_Drop"
+                    PreviewMouseRightButtonDown="TreeItem_PreviewMouseRightButtonDown">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="BorderBrush" Value="LightGray"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem}, Path=IsSelected}" Value="True">
+                                <Setter Property="BorderBrush" Value="{StaticResource SelectedBorderBrush}"/>
+                                <Setter Property="BorderThickness" Value="2"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+
+                <Border.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Добавить модель"
+                                  Tag="{Binding}"
+                                  Click="AddMenuItem_Click"/>
+                        <MenuItem Header="Редактировать серию"
+                                  Tag="{Binding}"
+                                  Click="EditMenuItem_Click"/>
+                        <MenuItem Header="Удалить серию"
+                                  Tag="{Binding}"
+                                  Click="DeleteMenuItem_Click"/>
+                    </ContextMenu>
+                </Border.ContextMenu>
+
+                <StackPanel>
+                    <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                        <TextBlock Text="Сегмент: " Foreground="Gray"/>
+                        <TextBlock Text="{Binding Segment}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Моделей: " Foreground="Gray"/>
+                        <TextBlock Text="{Binding SmartphoneModels.Count}" FontWeight="Bold"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </HierarchicalDataTemplate>
+
+        <HierarchicalDataTemplate DataType="{x:Type models:Brand}"
+                                  ItemsSource="{Binding Series}">
+            <Border CornerRadius="5"
+                    Padding="8"
+                    Margin="2"
+                    Background="#FFDCE6FF"
+                    PreviewMouseRightButtonDown="TreeItem_PreviewMouseRightButtonDown">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+                        <Setter Property="BorderThickness" Value="1.4"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem}, Path=IsSelected}" Value="True">
+                                <Setter Property="BorderBrush" Value="{StaticResource SelectedBorderBrush}"/>
+                                <Setter Property="BorderThickness" Value="2"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+
+                <Border.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Добавить серию"
+                                  Tag="{Binding}"
+                                  Click="AddMenuItem_Click"/>
+                        <MenuItem Header="Редактировать бренд"
+                                  Tag="{Binding}"
+                                  Click="EditMenuItem_Click"/>
+                        <MenuItem Header="Удалить бренд"
+                                  Tag="{Binding}"
+                                  Click="DeleteMenuItem_Click"/>
+                    </ContextMenu>
+                </Border.ContextMenu>
+
+                <StackPanel>
+                    <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="16"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Страна: " Foreground="Gray"/>
+                        <TextBlock Text="{Binding Country}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Серий: " Foreground="Gray"/>
+                        <TextBlock Text="{Binding Series.Count}" FontWeight="Bold"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </HierarchicalDataTemplate>
     </Window.Resources>
 
     <Grid Margin="10" PreviewMouseLeftButtonDown="MainGrid_PreviewMouseLeftButtonDown">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="10"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-        <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="1" Padding="10">
-            <TreeView x:Name="MainTreeView"
-                      SelectedItemChanged="MainTreeView_SelectedItemChanged"/>
-        </Border>
+        <TextBlock Grid.Row="0"
+                   Text="Управление брендами, сериями и моделями смартфонов"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,20"/>
 
-        <GridSplitter Grid.Column="1"
-                      Width="5"
-                      HorizontalAlignment="Stretch"
-                      VerticalAlignment="Stretch"
-                      Background="LightGray"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MinWidth="320"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="320" MinWidth="280"/>
+            </Grid.ColumnDefinitions>
 
-        <Border Grid.Column="2" BorderBrush="Gray" BorderThickness="1" Padding="10">
-            <StackPanel>
-                <TextBlock Text="Информация"
-                           FontSize="18"
-                           FontWeight="Bold"
-                           Margin="0,0,0,15"/>
+            <Border Grid.Column="0"
+                    BorderBrush="Black"
+                    BorderThickness="1"
+                    Padding="5">
+                <TreeView x:Name="MainTreeView"
+                          FocusVisualStyle="{x:Null}"
+                          Background="Transparent"
+                          SelectedItemChanged="MainTreeView_SelectedItemChanged">
+                    <TreeView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Добавить бренд"
+                                      Click="AddBrandMenuItem_Click"/>
+                        </ContextMenu>
+                    </TreeView.ContextMenu>
+                    <TreeView.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent"/>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="Transparent"/>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black"/>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="Black"/>
+                    </TreeView.Resources>
+                    <TreeView.ItemContainerStyle>
+                        <Style TargetType="TreeViewItem">
+                            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderBrush" Value="Transparent"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Foreground" Value="Black"/>
+                            <Setter Property="Padding" Value="1"/>
+                        </Style>
+                    </TreeView.ItemContainerStyle>
+                </TreeView>
+            </Border>
 
-                <TextBlock x:Name="InfoTextBlock"
-                           Text="Ничего не выбрано"
-                           TextWrapping="Wrap"
-                           Margin="0,0,0,20"/>
+            <GridSplitter Grid.Column="1"
+                          Width="3"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Stretch"
+                          Background="LightGray"/>
 
-                <Button x:Name="AddButton"
-                        Content="Добавить"
-                        Height="40"
-                        Margin="0,0,0,10"
-                        Click="AddButton_Click"/>
+            <Border Grid.Column="2"
+                    BorderBrush="Black"
+                    BorderThickness="1"
+                    Padding="10">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <TextBlock Text="Панель управления"
+                               FontSize="16"
+                               FontWeight="Bold"
+                               Margin="0,0,0,15"/>
 
-                <Button x:Name="EditButton"
-                        Content="Редактировать"
-                        Height="40"
-                        Margin="0,0,0,10"
-                        Click="EditButton_Click"/>
+                    <Border Background="LightGray"
+                            Padding="8"
+                            Margin="0,0,0,15">
+                        <StackPanel>
+                            <TextBlock Text="Выбрано:" FontWeight="Bold"/>
+                            <TextBlock x:Name="InfoTextBlock"
+                                       Text="Ничего не выбрано"
+                                       TextWrapping="Wrap"
+                                       Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Border>
 
-                <Button x:Name="DeleteButton"
-                        Content="Удалить"
-                        Height="40"
-                        Click="DeleteButton_Click"/>
-            </StackPanel>
-        </Border>
+                    <Button x:Name="AddButton"
+                            Content="Добавить"
+                            Height="40"
+                            Margin="0,5"
+                            Background="LightGreen"
+                            FontSize="14"
+                            Click="AddButton_Click"/>
+
+                    <Button x:Name="EditButton"
+                            Content="Редактировать"
+                            Height="40"
+                            Margin="0,5"
+                            Background="LightBlue"
+                            FontSize="14"
+                            Click="EditButton_Click"/>
+
+                    <Button x:Name="DeleteButton"
+                            Content="Удалить"
+                            Height="40"
+                            Margin="0,5"
+                            Background="LightCoral"
+                            FontSize="14"
+                            Click="DeleteButton_Click"/>
+
+                    <Button x:Name="UsersButton"
+                            Content="Пользователи"
+                            Height="40"
+                            Margin="0,5"
+                            Background="LightGoldenrodYellow"
+                            FontSize="14"
+                            Click="OpenUsersButton_Click"/>
+
+                    <Button x:Name="ExportJsonButton"
+                            Content="Экспорт в JSON"
+                            Height="40"
+                            Margin="0,5"
+                            Background="LightSteelBlue"
+                            FontSize="14"
+                            Click="ExportToJson"/>
+
+                    <Button x:Name="ExportXmlButton"
+                            Content="Экспорт в XML"
+                            Height="40"
+                            Margin="0,5"
+                            Background="LightSteelBlue"
+                            FontSize="14"
+                            Click="ExportToXml"/>
+
+                    <Border Background="LightYellow"
+                            Padding="8"
+                            Margin="0,20,0,0">
+                        <TextBlock TextWrapping="Wrap">
+                            Выберите бренд, чтобы добавить серию.
+                            Выберите серию, чтобы добавить модель.
+                            Щелкните по пустой области, чтобы снять выделение и добавить новый бренд.
+                        </TextBlock>
+                    </Border>
+                </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
     </Grid>
 </Window>

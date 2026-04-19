@@ -20,6 +20,7 @@ public class AppDbContext : DbContext
     {
     }
 
+    // Здесь описываем структуру таблиц, ограничения и поведение связей при удалении
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Brand>(entity =>
@@ -52,6 +53,7 @@ public class AppDbContext : DbContext
                 .IsRequired()
                 .HasMaxLength(50);
 
+            // Restrict не дает удалить бренд, пока на него ссылаются дочерние серии
             entity.HasOne(x => x.Brand)
                 .WithMany(x => x.Series)
                 .HasForeignKey(x => x.BrandId)
@@ -73,6 +75,7 @@ public class AppDbContext : DbContext
             entity.Property(x => x.Price)
                 .HasPrecision(10, 2);
 
+            // Restrict не дает удалить серию, пока в ней еще есть модели смартфонов
             entity.HasOne(x => x.Series)
                 .WithMany(x => x.SmartphoneModels)
                 .HasForeignKey(x => x.SeriesId)
@@ -114,6 +117,10 @@ public class AppDbContext : DbContext
             entity.ToTable("ActionLogs");
             entity.HasKey(x => x.Id);
 
+            entity.Property(x => x.UserLoginSnapshot)
+                .IsRequired()
+                .HasMaxLength(50);
+
             entity.Property(x => x.ActionType)
                 .IsRequired()
                 .HasMaxLength(50);
@@ -128,10 +135,11 @@ public class AppDbContext : DbContext
             entity.Property(x => x.CreatedAt)
                 .IsRequired();
 
+            // При удалении пользователя логи сохраняются, а внешний ключ на пользователя становится пустым
             entity.HasOne(x => x.User)
                 .WithMany(x => x.ActionLogs)
                 .HasForeignKey(x => x.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
         });
     }
 }

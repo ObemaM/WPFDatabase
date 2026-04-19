@@ -10,8 +10,9 @@ namespace WPFDatabase.Models;
 public class ActionLog
 {
     private int _id;
-    private int _userId;
+    private int? _userId;
     private User? _user;
+    private string _userLoginSnapshot = string.Empty;
     private string _actionType = string.Empty;
     private string _entityType = string.Empty;
     private int _entityId;
@@ -24,7 +25,7 @@ public class ActionLog
         set { _id = value; OnPropertyChanged(); }
     }
 
-    public int UserId
+    public int? UserId
     {
         get => _userId;
         set { _userId = value; OnPropertyChanged(); }
@@ -34,6 +35,12 @@ public class ActionLog
     {
         get => _user;
         set { _user = value; OnPropertyChanged(); }
+    }
+
+    public string UserLoginSnapshot
+    {
+        get => _userLoginSnapshot;
+        set { _userLoginSnapshot = value; OnPropertyChanged(); }
     }
 
     public string ActionType

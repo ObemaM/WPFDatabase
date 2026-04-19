@@ -44,8 +44,13 @@ namespace WPFDatabase.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("UserLoginSnapshot")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -183,8 +188,7 @@ namespace WPFDatabase.Migrations
                     b.HasOne("WPFDatabase.Models.User", "User")
                         .WithMany("ActionLogs")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("User");
                 });

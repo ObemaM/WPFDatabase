@@ -5,6 +5,7 @@ namespace WPFDatabase.Data;
 
 public static class DataSeeder
 {
+    // При первом запуске создаем БД и добавляем данные
     public static void Seed(AppDbContext context)
     {
         context.Database.Migrate();
