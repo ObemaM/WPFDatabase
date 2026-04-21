@@ -1,4 +1,12 @@
 .vs/
-bin/
-obj/
+**/bin/
+**/obj/
 *.user
+.dotnet/
+.nuget/
+temp-build/
+*.db
+*.db-journal
+*.bak
+*.log
+*.tmp
